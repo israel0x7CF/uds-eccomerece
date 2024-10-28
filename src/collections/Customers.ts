@@ -5,6 +5,11 @@ export const Customers: CollectionConfig = {
     admin:{
         useAsTitle:"customer_name"
     },
+    access: {
+        read: () => true,
+        create: () => true,
+        update: () => true,
+      },
     fields:[
         {
             name:"customer_name",
@@ -19,7 +24,7 @@ export const Customers: CollectionConfig = {
         {
             name:"phone",
             type:'text',
-            label:"Customer Name"
+            label:"Customer Phone"
         },
     ]
 }

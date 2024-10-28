@@ -5,6 +5,11 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'productName',
   },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+  },
   fields: [
     {
       name: 'productName',
@@ -15,6 +20,11 @@ export const Products: CollectionConfig = {
       name: 'description',
       type: 'text',
       label: 'Description',
+    },
+    {
+      name: 'longDescription',
+      type: 'text',
+      label: 'Details',
     },
 
     {

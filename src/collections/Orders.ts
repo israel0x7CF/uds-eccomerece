@@ -6,6 +6,11 @@ export const Orders: CollectionConfig = {
     admin:{
         useAsTitle:"order_identifier"
     },
+    access: {
+        read: () => true,
+        create: () => true,
+        update: () => true,
+      },
     fields:[
         {
             name:"order_identifier",
@@ -27,6 +32,12 @@ export const Orders: CollectionConfig = {
             type:'relationship',
             label:"Product",
             relationTo:"products"
+        },
+        {
+            name:"quantity",
+            type:'number',
+            label:"Product",
+          
         },
         {
             name:"status",

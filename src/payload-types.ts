@@ -55,6 +55,9 @@ export interface User {
   id: string;
   updatedAt: string;
   createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -91,6 +94,7 @@ export interface Product {
   id: string;
   productName?: string | null;
   description?: string | null;
+  longDescription?: string | null;
   price?: string | null;
   Qty?: number | null;
   available?: boolean | null;
@@ -124,6 +128,7 @@ export interface Order {
   order_identifier?: string | null;
   order_customer?: (string | null) | Customer;
   order_product?: (string | null) | Product;
+  quantity?: number | null;
   status?: ('pending' | 'delivered') | null;
   payment_status?: ('pending' | 'paid') | null;
   order_date?: string | null;
