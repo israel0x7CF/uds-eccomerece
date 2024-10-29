@@ -1,3 +1,4 @@
+'use client'
 import { Product } from '@/app/types/type'
 import React from 'react'
 import { Button } from './ui/button'
@@ -54,17 +55,19 @@ const ProductCard: React.FC<props> = (prop) => {
         <span className="block opacity-75 -mb-1 text-[hsl(var(--muted-foreground))]">Indoor</span>
         <div className="flex justify-between">
           <span className="block font-semibold text-xl">{product.productName}</span>
-          <span className="block bg-[hsl(var(--background))] rounded-full text-[hsl(var(--primary))] text-xs font-bold px-3 py-2 leading-none flex items-center">
-            {product.price}
-          </span>
         </div>
+        <span className=" bg-white text-[hsl(var(--primary))] text-xs font-bold px-3 py-2 leading-none flex items-center">
+          {product.price}
+        </span>
         <Button
           className="inline-flex h-10 items-center justify-center rounded-md px-8 text-sm font-medium shadow transition-colors
     bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]
     hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--secondary-foreground))]
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:bg-[hsl(var(--primary), 0.8)]
     disabled:pointer-events-none disabled:opacity-50"
-    onClick={redirect(`/checkout/${product.id}`)}
+          onClick={() => {
+            redirect(`/detail/${product.id}`)
+          }}
         >
           <ChevronRight />
         </Button>

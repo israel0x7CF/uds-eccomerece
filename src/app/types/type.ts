@@ -75,16 +75,42 @@ export interface Customers {
 
 export interface ApiResponse<T> {
   data: {
-    docs: T[];
-    totalDocs: number;
-    limit: number;
-    totalPages: number;
-    page: number;
-    pagingCounter: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevPage: number | null;
-    nextPage: number | null;
-  };
-  error: string | null;
+    docs: T[]
+    totalDocs: number
+    limit: number
+    totalPages: number
+    page: number
+    pagingCounter: number
+    hasPrevPage: boolean
+    hasNextPage: boolean
+    prevPage: number | null
+    nextPage: number | null
+  }
+  error: string | null
+}
+
+export interface ApiResponseSingleFetch<T> {
+  data: T
+  error: string | null
+}
+
+export interface checkoutSchema {
+  amount: number
+  currency: string | 'ETB'
+  email: string
+  first_name: string
+  last_name: string
+  phone_number: string
+  tx_ref: string
+}
+
+
+export interface Root {
+  message: string
+  status: string
+  data: Data
+}
+
+export interface Data {
+  checkout_url: string
 }

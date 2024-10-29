@@ -1,23 +1,22 @@
 import ProductCard from '@/components/ProductCard'
 import Link from 'next/link'
-import { Product } from '../types/type'
+import { ApiResponse, Product } from '../types/type'
 import fetchData from '../utils/fetch'
 
 export interface ProductResponse {
-  data: Product[]; // Adjusted to reflect the array of Product directly in `data`
-  error: string | null;
+  data: Product[] // Adjusted to reflect the array of Product directly in `data`
+  error: string | null
 }
 
 export default async function Shop() {
   const url = process.env.NEXT_PUBLIC_API_URL + 'products'
-  console.log(url)
+
   const productsResponse = await fetchData<Product>(url, 'products')
-  let products: Product[] = []; // Instead of `any`
+  let products: Product[] = [] // Instead of `any`
   let error = null
 
   if (!productsResponse.error) {
-    console.log(productsResponse)
-    products = productsResponse.data.docs ?? [] // Access docs inside data
+    products = (productsResponse as ApiResponse<Product>).data.docs
   } else {
     error = true
   }
@@ -53,24 +52,26 @@ export default async function Shop() {
                   </Link>
                 </div>
               </div>
-              <img
+              {/* <img
                 src=""
                 width="550"
                 height="550"
                 alt="Hero"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
-              />
+              /> */}
             </div>
           </div>
         </section>
-        <section className="w-full md:py-24 dark:bg-gray-800">
-          <h1 className="text-3xl pl-3 font-bold tracking-tighter text-[hsl(var(--foreground))] sm:text-5xl xl:text-6xl/none">
-            Products
-          </h1>
-          <div className="grid grid-cols-1 xl:grid-cols-5 gap-9 px-4 py-3">
-            {products.map((item: Product) => (
-              <ProductCard key={item.id} product={item} />
-            ))}
+        <section className="w-full py-16 md:py-24 dark:bg-gray-800">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-4xl font-bold tracking-tighter text-[hsl(var(--foreground))] text-center sm:text-5xl xl:text-6xl mb-16">
+              Products
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 md:gap-12 lg:gap-16">
+              {products.map((item: Product) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+            </div>
           </div>
         </section>
       </main>
