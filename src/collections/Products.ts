@@ -43,6 +43,17 @@ export const Products: CollectionConfig = {
       label: 'availability',
     },
     {
+      name: 'productType',
+      type: 'select',
+      label: 'Product Type',
+      options: [
+        { value: "Indoor", label: "Indoor" },
+        { value: "Hanging", label: "Hanging" },
+        { value: "Succulent", label: "Succulent" },
+        { value: "Flowering", label: "Flowering" }
+      ]
+    },
+    {
       name: 'image',
       type: 'relationship',
       label: 'Product Image',
@@ -55,6 +66,7 @@ export const Products: CollectionConfig = {
       defaultValue: () => new Date().toISOString().split('T')[0], // Sets default to today's date
       hidden: true,
     },
+    
     {
       name: 'updated_at',
       type: 'date',

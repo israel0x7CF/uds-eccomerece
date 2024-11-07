@@ -98,6 +98,7 @@ export interface Product {
   price?: string | null;
   Qty?: number | null;
   available?: boolean | null;
+  productType?: ('Indoor' | 'Hanging' | 'Succulent' | 'Flowering') | null;
   image?: {
     relationTo: 'media';
     value: string | Media;

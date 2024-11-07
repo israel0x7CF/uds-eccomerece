@@ -15,12 +15,13 @@ export const Orders: CollectionConfig = {
         {
             name:"order_identifier",
             type:'text',
-            label:"Order Code",
+            label:"Order Code/Customer Tracking Number",
             defaultValue:uuidv4(),
             admin:{
                 readOnly:true
             }
         },
+
         {
             name:"order_customer",
             type:'relationship',

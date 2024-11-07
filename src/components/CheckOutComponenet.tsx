@@ -19,7 +19,6 @@
   import { Label } from '@/components/ui/label'
   import { v4 as uuidv4 } from 'uuid'
 
-  import fetchData from '@/app/utils/fetch'
   import { Root } from '@/app/types/type'
   import axios from 'axios'
   type Props = {

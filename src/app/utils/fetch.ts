@@ -17,8 +17,10 @@ export default async function fetchData<T = any>(
         Authorization: `${slug} API-Key ${userApiKey}`,
       },
     });
+    
     data = response.data;
   } catch (err) {
+ 
     if (err instanceof Error) {
       error = err.message;
     }

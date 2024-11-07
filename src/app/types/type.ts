@@ -53,6 +53,7 @@ export type Product = {
   description: string
   price: string
   Qty: number
+  category:string
   available: boolean
   image: {
     relationTo: string
