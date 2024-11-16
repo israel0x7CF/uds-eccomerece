@@ -1,15 +1,52 @@
 import { Root } from "@/app/types/type";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from 'uuid';
 
+
+interface CustomerPayload {
+  email: string;
+  customer_name?: string; // Optional fields if you want to update or add more
+  phone?: string;
+}
+async function upsertCustomer(payload:CustomerPayload) {
+  try {
+    const url  =  process.env.NEXT_PUBLIC_API_URL + "customers/upsertcustomer"
+    const response: AxiosResponse<any> = await axios.patch(url, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Customer found or updated:', response.data.customer);
+    } else {
+      console.log(response.data.message);
+    }
+  } catch (error: any) {
+    if (error.response) {
+      // Error from the server
+      console.error('Error response:', error.response.data);
+    } else {
+      // Other errors
+      console.error('Error:', error.message);
+    }
+  }
+}
 export async function POST(req: Request) {
   try {
     const payload = await req.json();
     const {  amount,email, first_name, last_name, phone_number, tx_ref } = payload;
+   const customer:CustomerPayload = {
+    email:email,
+    customer_name: `${first_name} ${last_name}`,
+    phone:phone_number
+   } 
+   const upsertResponse = upsertCustomer(customer)
     const secret = process.env.NEXT_PUBLIC_CHAPPA_API_PRIVATE_KEY;
     const currency = "ETB"
     const callback_url = `${process.env.NEXT_PUBLIC_API_URL}handlePayment/paymentCallback`
+
     const options = {
       method: 'POST',
       url: 'https://api.chapa.co/v1/transaction/initialize',
