@@ -4,11 +4,36 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ShoppingCart, Search, Menu, Leaf, Droplet, Sun } from 'lucide-react'
 import AnimatedButton from '@/components/customButton'
+import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
+import { ApiResponse, payloadProductResponse, Product } from '../types/type'
 
-export default function PlantSalesLandingPage() {
+export async function fetchFeaturedProducts(): Promise<Product[] | null> {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const client = axios.create({ baseURL: baseUrl })
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      Accept: 'Application/json',
+    } as RawAxiosRequestHeaders,
+  }
+  const query = 'products/getFeaturedProducts?depth=1'
+  try {
+    const activeProducts: AxiosResponse<payloadProductResponse> = await client.get(query, config)
+
+    const activeProductsList: Product[] = activeProducts.data.docs
+    return activeProductsList
+  } catch (err) {
+    console.log(err)
+    return null
+  }
+}
+
+export default async function PlantSalesLandingPage() {
+  const activeProducts = await fetchFeaturedProducts()
+  const assetUrl = process.env.NEXT_PUBLIC_HOST_URL
+  console.log(activeProducts)
   return (
     <div className="min-h-screen flex flex-col">
-
       <main className="flex-grow">
         <section className="relative h-[70vh]">
           <Image src="/newname.png" alt="Beautiful plants" layout="fill" objectFit="cover" />
@@ -21,7 +46,7 @@ export default function PlantSalesLandingPage() {
                 Discover our wide selection of indoor and outdoor plants to transform your space.
               </p>
               <div className="flex justify-center">
-                <AnimatedButton url='/shop'/>
+                <AnimatedButton url="/shop" />
               </div>
             </div>
           </div>
@@ -93,35 +118,40 @@ export default function PlantSalesLandingPage() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Featured Plants</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[{name:'Monstera Deliciosa',asset:"/Monstera.jpg"}, {name:'Fiddle Leaf Fig',asset:"/fiddle.jpg"}, {name:'Snake Plant',asset:"/snake.jpg"}].map((plant) => (
-                <div key={plant.name} className="group relative overflow-hidden rounded-lg shadow-lg">
-                  <Image
-                    src={plant.asset}
-                    alt={plant.name}
-                    width={300}
-                    height={400}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2 text-white">{plant.name}</h3>
-                      <Link
-                        href={`/plant/${plant.name.toLowerCase().replace(' ', '-')}`}
-                        className="text-white hover:underline"
-                      >
-                        Learn More
-                      </Link>
+              {activeProducts &&
+                activeProducts.map((plant) => (
+                  <div
+                    key={plant.productName}
+                    className="group relative overflow-hidden rounded-lg shadow-lg"
+                  >
+                    <Image
+                      src={assetUrl + plant.image.value.url}
+                      alt={plant.productName}
+                      width={300}
+                      height={400}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2 text-white">
+                          {plant.productName}
+                        </h3>
+                        <Link href={`/detail/${plant.id}`} className="text-white hover:underline">
+                          Learn More
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </section>
 
         <section className="py-16 bg-green-50">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-8 text-[#0d2617]">Ready to Start Your Plant Journey?</h2>
+            <h2 className="text-3xl font-bold mb-8 text-[#0d2617]">
+              Ready to Start Your Plant Journey?
+            </h2>
             <Button size="lg">Shop All Plants</Button>
           </div>
         </section>
@@ -233,6 +263,3 @@ export default function PlantSalesLandingPage() {
     </div>
   )
 }
-
-
-

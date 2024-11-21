@@ -93,6 +93,7 @@ export interface Media {
 export interface Product {
   id: string;
   productName?: string | null;
+  featuredProduct?: boolean | null;
   description?: string | null;
   longDescription?: string | null;
   price?: string | null;

@@ -115,3 +115,17 @@ export interface Root {
 export interface Data {
   checkout_url: string
 }
+export interface payloadProductResponse{
+
+    docs: Product[];
+    totalDocs: number;
+    limit: number;
+    totalPages: number;
+    page: number;
+    pagingCounter: number;
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+    prevPage: any;
+    nextPage: any;
+  
+}
