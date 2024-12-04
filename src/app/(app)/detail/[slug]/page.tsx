@@ -12,7 +12,7 @@ type Props = {
   }>
 }
 
-function page({ params }: Props) {
+function Page({ params }: Props) {
   const [product, setProduct] = useState<Product | null>(null)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -94,4 +94,4 @@ function page({ params }: Props) {
   )
 }
 
-export default page
+export default Page

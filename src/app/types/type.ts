@@ -63,6 +63,7 @@ export type Product = {
   updatedAt: string
   created_at: string
   updated_at: string
+  orderQunatity?:number
 }
 
 export interface Customers {
@@ -129,3 +130,14 @@ export interface payloadProductResponse{
     nextPage: any;
   
 }
+export interface productBasket{
+  items:Product[]
+}
+export type Action =
+  | { type: 'ADD_ITEM'; payload: Product }
+  | { type: 'REMOVE_ITEM'; payload: string };
+
+export type ContextProps = {
+  state: productBasket;
+  dispatch: React.Dispatch<Action>;
+};

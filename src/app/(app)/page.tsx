@@ -7,7 +7,7 @@ import AnimatedButton from '@/components/customButton'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
 import { ApiResponse, payloadProductResponse, Product } from '../types/type'
 
-export async function fetchFeaturedProducts(): Promise<Product[] | null> {
+ async function fetchFeaturedProducts(): Promise<Product[] | null> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const client = axios.create({ baseURL: baseUrl })
 
@@ -31,7 +31,7 @@ export async function fetchFeaturedProducts(): Promise<Product[] | null> {
 export default async function PlantSalesLandingPage() {
   const activeProducts = await fetchFeaturedProducts()
   const assetUrl = process.env.NEXT_PUBLIC_HOST_URL
-  console.log(activeProducts)
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
@@ -43,7 +43,7 @@ export default async function PlantSalesLandingPage() {
                 Bring Nature Into Your Home
               </h1>
               <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-                Discover our wide selection of indoor and outdoor plants to transform your space.
+                Discover our wide selection of Herbs to transform your space.
               </p>
               <div className="flex justify-center">
                 <AnimatedButton url="/shop" />
@@ -54,7 +54,7 @@ export default async function PlantSalesLandingPage() {
 
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Why Choose GreenThumb?</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">Why Choose ShitayeHerbs?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
@@ -116,7 +116,7 @@ export default async function PlantSalesLandingPage() {
 
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Featured Plants</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">Featured Herbs </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {activeProducts &&
                 activeProducts.map((plant) => (
@@ -136,6 +136,9 @@ export default async function PlantSalesLandingPage() {
                         <h3 className="text-xl font-semibold mb-2 text-white">
                           {plant.productName}
                         </h3>
+                        <h2 className="text-xl font-semibold mb-2 text-white">
+                          Br.{plant.price}
+                        </h2>
                         <Link href={`/detail/${plant.id}`} className="text-white hover:underline">
                           Learn More
                         </Link>
@@ -152,7 +155,10 @@ export default async function PlantSalesLandingPage() {
             <h2 className="text-3xl font-bold mb-8 text-[#0d2617]">
               Ready to Start Your Plant Journey?
             </h2>
-            <Button size="lg">Shop All Plants</Button>
+            <Button size="lg">
+              {' '}
+              <Link href="/shop">Shop All Plants</Link>
+            </Button>
           </div>
         </section>
       </main>
@@ -163,12 +169,7 @@ export default async function PlantSalesLandingPage() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Shop</h3>
               <ul className="space-y-2">
-                <li>
-                  <Link href="/indoor">Indoor Plants</Link>
-                </li>
-                <li>
-                  <Link href="/outdoor">Outdoor Plants</Link>
-                </li>
+
                 <li>
                   <Link href="/accessories">Plant Accessories</Link>
                 </li>
@@ -189,9 +190,6 @@ export default async function PlantSalesLandingPage() {
                 <li>
                   <Link href="/blog">Blog</Link>
                 </li>
-                <li>
-                  <Link href="/careers">Careers</Link>
-                </li>
               </ul>
             </div>
             <div>
@@ -203,9 +201,7 @@ export default async function PlantSalesLandingPage() {
                 <li>
                   <Link href="/shipping">Shipping & Returns</Link>
                 </li>
-                <li>
-                  <Link href="/care-guides">Plant Care Guides</Link>
-                </li>
+   
                 <li>
                   <Link href="/faq">FAQ</Link>
                 </li>

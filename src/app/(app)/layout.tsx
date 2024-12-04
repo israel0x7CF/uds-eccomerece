@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
 import Navbar from '@/components/NavBar'
+import ProductCart from '@/hooks/cart'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -22,8 +23,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {/* Sidebar */}
         {/* main page */}
         <div className="w-full">
-          <Navbar />
-          {children}
+          <ProductCart>
+            <Navbar />
+            {children}
+          </ProductCart>
         </div>
       </body>
     </html>
