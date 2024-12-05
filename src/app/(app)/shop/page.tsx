@@ -54,7 +54,7 @@ export default function ProductsPage() {
   )
   const addToCart = (product: Product) => {
     console.log('adding to cart:', product)
-    product.orderQunatity = product.orderQunatity ? product.orderQunatity +1 : 1
+    product.orderQunatity = product.orderQunatity ? product.orderQunatity + 1 : 1
     dispatch({ type: 'ADD_ITEM', payload: product })
   }
   const removeFromCart = (id: string) => {
@@ -100,19 +100,13 @@ export default function ProductsPage() {
                       Buy
                     </Button>
                     <div className="flex items-center justify-between border w-full bg-white px-2 py-1 rounded-md">
-                      <button
-                        className="text-sm text-gray-700 bg-red-100 px-2 py-1 rounded hover:bg-red-200"
-                        onClick={() => removeFromCart(product.id)}
-                      >
-                        -
-                      </button>
-                      <span className="text-sm font-medium text-gray-900">add</span>
-                      <button
+                      <Button
                         className="text-sm text-gray-700 bg-green-100 px-2 py-1 rounded hover:bg-green-200"
                         onClick={() => addToCart(product)}
                       >
-                        +
-                      </button>
+                        <span className="text-sm font-medium text-gray-900">Add To Cart</span>
+                        <ShoppingCart />
+                      </Button>
                     </div>
                   </CardFooter>
                 </Card>

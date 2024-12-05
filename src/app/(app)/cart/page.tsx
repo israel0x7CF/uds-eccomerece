@@ -162,7 +162,7 @@ export default function CartPage() {
           <p>&copy; 2024 ShitayeHerbs. All rights reserved.</p>
         </div>
       </footer>
-      <p>{JSON.stringify(cartItems)}</p>
+  
     </div>
   )
 }
