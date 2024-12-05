@@ -5,6 +5,7 @@ import { Product } from '@/app/types/type'
 import { useRouter } from 'next/navigation'
 import { ApiResponseSingleFetch } from '@/app/types/type'
 import { CheckOutComponent } from '@/components/CheckOutComponenet'
+import FeaturedProducts from '@/components/FeaturedProducts'
 
 type Props = {
   params: Promise<{
@@ -90,6 +91,7 @@ function Page({ params }: Props) {
           </div>
         </div>
       </div>
+      <FeaturedProducts />
     </div>
   )
 }

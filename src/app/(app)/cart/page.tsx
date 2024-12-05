@@ -17,6 +17,7 @@ import Image from 'next/image'
 import { useProductCart } from '@/hooks/cart'
 import { Product, productBasket } from '@/app/types/type'
 import { CheckOutComponent } from '@/components/CheckOutComponenet'
+import FeaturedProducts from '@/components/FeaturedProducts'
 
 export default function CartPage() {
   const { state, dispatch } = useProductCart()
@@ -153,6 +154,7 @@ export default function CartPage() {
             </div>
           </div>
         )}
+        <FeaturedProducts />
       </main>
 
       <footer className="bg-muted text-muted-foreground py-8">
