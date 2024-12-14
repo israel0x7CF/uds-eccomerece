@@ -1,5 +1,5 @@
 'use client'
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState,use } from 'react'
 import fetchData from '@/app/utils/fetch'
 import { Product } from '@/app/types/type'
 import { useRouter } from 'next/navigation'
@@ -7,7 +7,7 @@ import { ApiResponseSingleFetch } from '@/app/types/type'
 import { CheckOutComponent } from '@/components/CheckOutComponenet'
 import FeaturedProducts from '@/components/FeaturedProducts'
 
-type Props = {
+ type Props = {
   params: Promise<{
     slug: string
   }>
@@ -21,7 +21,7 @@ function Page({ params }: Props) {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}products/${slug}`
+      const url = `${process.env.NEXT_PUBLIC_API_URL || ''}products/${slug}`
 
       try {
         const productResponse = await fetchData<Product>(url, 'products', true)
@@ -42,18 +42,23 @@ function Page({ params }: Props) {
 
   // Check if product is null and return a fallback UI
   if (!product) {
-    return <div>Loading product details...</div>
+    return <div className="text-center text-gray-600">Loading product details...</div>
   }
 
   return (
-    <div className="bg-background dark:bg-background py-8">
+    <div className="bg-gray-100 dark:bg-gray-900 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row -mx-4">
+          {/* Product Image and Checkout */}
           <div className="md:flex-1 px-4">
-            <div className="h-[460px] rounded-lg bg-card dark:bg-card mb-4">
+            <div className="h-[460px] rounded-lg bg-white dark:bg-gray-800 mb-4">
               <img
                 className="w-full h-full object-cover"
-                src={product.image?.value?.url ? `${process.env.NEXT_PUBLIC_HOST_URL}${product.image.value.url}` : ''}
+                src={
+                  product.image?.value?.url
+                    ? `${process.env.NEXT_PUBLIC_HOST_URL}${product.image.value.url}`
+                    : ''
+                }
                 alt="Product Image"
               />
             </div>
@@ -63,28 +68,30 @@ function Page({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {/* Product Details */}
           <div className="md:flex-1 px-4">
-            <h2 className="text-2xl font-bold text-foreground dark:text-foreground mb-2">
+            <h2 className="text-2xl font-bold text-black dark:text-white mb-2">
               {product.productName || 'Product Name'}
             </h2>
             <div className="flex mb-4">
               <div className="mr-4">
-                <span className="font-bold text-muted-foreground dark:text-muted-foreground">
+                <span className="font-bold text-gray-600 dark:text-gray-400">
                   Price: {product.price || 'N/A'} ETB
                 </span>
               </div>
               <div>
-                <span className="font-bold text-muted-foreground dark:text-muted-foreground">
-                {product.available ? 'In Stock' : 'Out of Stock'}
+                <span className="font-bold text-gray-600 dark:text-gray-400">
+                  {product.available ? 'In Stock' : 'Out of Stock'}
                 </span>
               </div>
             </div>
 
             <div>
-              <span className="font-bold text-muted-foreground dark:text-muted-foreground">
+              <span className="font-bold text-gray-600 dark:text-gray-400">
                 Product Description:
               </span>
-              <p className="text-muted-foreground dark:text-muted-foreground text-sm mt-2">
+              <p className="text-gray-700 dark:text-gray-300 text-sm mt-2">
                 {product.description || 'No description available'}
               </p>
             </div>

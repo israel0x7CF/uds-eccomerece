@@ -115,12 +115,6 @@ export default function ProductsPage() {
           </div>
         </div>
       </main>
-
-      <footer className="bg-muted text-muted-foreground py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2024 ShitayeHerbs. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   )
 }

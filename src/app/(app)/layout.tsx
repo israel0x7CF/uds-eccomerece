@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
 import Navbar from '@/components/NavBar'
 import ProductCart from '@/hooks/cart'
+import Footer from '@/components/Footer'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,6 +27,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <ProductCart>
             <Navbar />
             {children}
+            <Footer />
           </ProductCart>
         </div>
       </body>

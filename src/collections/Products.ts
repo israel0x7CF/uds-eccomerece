@@ -25,7 +25,6 @@ export const Products: CollectionConfig = {
             },
           },
         })
-   
 
         return Response.json(featuredProducts)
       },
@@ -41,9 +40,9 @@ export const Products: CollectionConfig = {
       name: 'featuredProduct',
       type: 'checkbox',
       label: 'Featured Product',
-      admin:{
-        description:"Featured Products Appear On The Home Page Of The Website"
-      }
+      admin: {
+        description: 'Featured Products Appear On The Home Page Of The Website',
+      },
     },
 
     {
@@ -61,6 +60,39 @@ export const Products: CollectionConfig = {
       name: 'price',
       type: 'text',
       label: 'Price',
+    },
+    {
+      name: 'width',
+      type: 'text',
+      label: 'Width',
+      admin: {
+        condition: (data, siblingData, { user }) => {
+          console.log("data:",data)
+          return true
+        },
+      },
+    },
+    {
+      name: 'height',
+      type: 'text',
+      label: 'Height',
+      admin: {
+        condition: (data, siblingData, { user }) => {
+          console.log(data, siblingData)
+          return true
+        },
+      },
+    },
+    {
+      name: 'potsize',
+      type: 'text',
+      label: 'Pot Size',
+      admin: {
+        condition: (data, siblingData, { user }) => {
+          console.log(data, siblingData)
+          return true
+        },
+      },
     },
     {
       name: 'Qty',

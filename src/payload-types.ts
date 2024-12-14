@@ -97,6 +97,9 @@ export interface Product {
   description?: string | null;
   longDescription?: string | null;
   price?: string | null;
+  width?: string | null;
+  height?: string | null;
+  potsize?: string | null;
   Qty?: number | null;
   available?: boolean | null;
   productType?: ('Indoor' | 'Hanging' | 'Succulent' | 'Flowering') | null;
