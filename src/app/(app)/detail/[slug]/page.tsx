@@ -1,23 +1,31 @@
 'use client'
-import React, { useEffect, useState,use } from 'react'
+import React, { useEffect, useState, use } from 'react'
 import fetchData from '@/app/utils/fetch'
 import { Product } from '@/app/types/type'
 import { useRouter } from 'next/navigation'
 import { ApiResponseSingleFetch } from '@/app/types/type'
-import { CheckOutComponent } from '@/components/CheckOutComponenet'
 import FeaturedProducts from '@/components/FeaturedProducts'
+import { Button } from '@/components/ui/button'
+import { ShoppingCart } from 'lucide-react'
+import { useProductCart } from '@/hooks/cart'
 
- type Props = {
+type Props = {
   params: Promise<{
     slug: string
   }>
 }
-
 function Page({ params }: Props) {
   const [product, setProduct] = useState<Product | null>(null)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const { slug } = use(params)
+  const { state, dispatch } = useProductCart()
+
+  const addToCart = (product: Product) => {
+ 
+    product.orderQunatity = product.orderQunatity ? product.orderQunatity + 1 : 1
+    dispatch({ type: 'ADD_ITEM', payload: product })
+  }
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -64,7 +72,13 @@ function Page({ params }: Props) {
             </div>
             <div className="flex -mx-2 mb-4">
               <div className="w-full px-2">
-                <CheckOutComponent productPrice={product.price || ''} />
+                <Button
+                  className="flex items-center space-x-2 text-sm text-gray-700 bg-green-100 px-2 py-1 rounded hover:bg-green-200"
+                  onClick={() => addToCart(product)}
+                >
+                  Add To Cart
+                  <ShoppingCart />
+                </Button>
               </div>
             </div>
           </div>

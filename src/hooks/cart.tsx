@@ -1,35 +1,56 @@
-import { Action, ContextProps, Product, productBasket } from '@/app/types/type'
-import React, { createContext, ReactNode, useContext, useReducer } from 'react'
+import { Action, ContextProps, Product, productBasket } from '@/app/types/type';
+import React, { createContext, ReactNode, useContext, useEffect, useReducer, useState } from 'react';
 
-type Props = {}
 const initialState: productBasket = {
   items: [],
-}
+};
+
 const productReducer = (state: productBasket, action: Action) => {
   switch (action.type) {
     case 'ADD_ITEM':
-      return { ...state,items: [...state.items, action.payload] }
+      return { ...state, items: [...state.items, action.payload] };
     case 'REMOVE_ITEM':
-      return { ...state, items: state.items.filter((item) => item.id !== action.payload) }
+      return { ...state, items: state.items.filter((item) => item.id !== action.payload) };
+    case 'INITIALIZE_CART':
+      return { ...state, items: action.payload };  // Initialize full cart from localStorage
+    default:
+      return state;
   }
-}
-const ProductCartContext = createContext<ContextProps | undefined>(undefined)
-const cartDispatch = createContext(null)
+};
+
+const ProductCartContext = createContext<ContextProps | undefined>(undefined);
+
 function ProductCart({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(productReducer, initialState)
+  const [state, dispatch] = useReducer(productReducer, initialCartState());
+  const [isLoaded, setValueLoaded] = useState<boolean>(false);
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem('product_cart', JSON.stringify(state));
+  }, [state]);
+
+  // Initialize cart state from localStorage on mount
+  function initialCartState() {
+    const savedCart = localStorage.getItem('product_cart');
+    if (savedCart) {
+      return JSON.parse(savedCart);
+    }
+    return initialState;
+  }
+
   return (
     <ProductCartContext.Provider value={{ state, dispatch }}>
-     {children}
+      {children}
     </ProductCartContext.Provider>
-  )
+  );
 }
 
 export const useProductCart = () => {
-  const context = useContext(ProductCartContext)
+  const context = useContext(ProductCartContext);
   if (!context) {
-    throw new Error('useProductCart must be used within a ProductCartProvider')
+    throw new Error('useProductCart must be used within a ProductCartProvider');
   }
-  return context
-}
+  return context;
+};
 
-export default ProductCart
+export default ProductCart;

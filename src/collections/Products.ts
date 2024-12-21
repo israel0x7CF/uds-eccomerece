@@ -1,4 +1,11 @@
-import { CollectionConfig } from 'payload'
+import { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
+
+const computePotSize: CollectionBeforeChangeHook = async ({ data }) => {
+  if (data.height && data.width) {
+    data.potsize = Number(data.height) * Number(data.width)
+  }
+  return data
+}
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -50,9 +57,10 @@ export const Products: CollectionConfig = {
       type: 'text',
       label: 'Description',
     },
+
     {
       name: 'longDescription',
-      type: 'text',
+      type: 'textarea',
       label: 'Details',
     },
 
@@ -65,34 +73,24 @@ export const Products: CollectionConfig = {
       name: 'width',
       type: 'text',
       label: 'Width',
-      admin: {
-        condition: (data, siblingData, { user }) => {
-          console.log("data:",data)
-          return true
-        },
-      },
     },
     {
       name: 'height',
       type: 'text',
       label: 'Height',
-      admin: {
-        condition: (data, siblingData, { user }) => {
-          console.log(data, siblingData)
-          return true
-        },
-      },
     },
     {
       name: 'potsize',
       type: 'text',
       label: 'Pot Size',
-      admin: {
-        condition: (data, siblingData, { user }) => {
-          console.log(data, siblingData)
-          return true
+      admin:{
+        condition:(data, siblingData, { user }) => {
+          if (siblingData.potsize || data.potsize) {
+            return true
+          }
+          return false
         },
-      },
+      }
     },
     {
       name: 'Qty',
@@ -136,4 +134,7 @@ export const Products: CollectionConfig = {
       defaultValue: () => new Date().toISOString().split('T')[0], // Sets default to today's date
     },
   ],
+  hooks: {
+    beforeChange: [computePotSize],
+  },
 }

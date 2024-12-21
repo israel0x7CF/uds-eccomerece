@@ -7,7 +7,7 @@ import AnimatedButton from '@/components/customButton'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
 import { ApiResponse, payloadProductResponse, Product } from '../types/type'
 
- async function fetchFeaturedProducts(): Promise<Product[] | null> {
+async function fetchFeaturedProducts(): Promise<Product[] | null> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const client = axios.create({ baseURL: baseUrl })
 
@@ -120,30 +120,34 @@ export default async function PlantSalesLandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {activeProducts &&
                 activeProducts.map((plant) => (
-                  <div
-                    key={plant.productName}
-                    className="group relative overflow-hidden rounded-lg shadow-lg"
-                  >
-                    <Image
-                      src={assetUrl + plant.image.value.url}
-                      alt={plant.productName}
-                      width={300}
-                      height={400}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2 text-white">
-                          {plant.productName}
-                        </h3>
-                        <h2 className="text-xl font-semibold mb-2 text-white">
-                          Br.{plant.price}
-                        </h2>
-                        <Link href={`/detail/${plant.id}`} className="text-white hover:underline">
-                          Learn More
-                        </Link>
+                  <div key={plant.id}>
+                    <Link href={`/detail/${plant.id}`} className="cursor-pointer">
+                      <div
+                        key={plant.productName}
+                        className="group relative overflow-hidden rounded-lg shadow-lg"
+                      >
+                        <Image
+                          src={assetUrl + plant.image.value.url}
+                          alt={plant.productName}
+                          width={300}
+                          height={400}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                          <div>
+                            <h3 className="text-xl font-semibold mb-2 text-white">
+                              {plant.productName}
+                            </h3>
+                            <h2 className="text-xl font-semibold mb-2 text-white">
+                              Br.{plant.price}
+                            </h2>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
+                    <Link href={`/detail/${plant.id}`} className="text-white hover:underline">
+                      Learn More
+                    </Link>
                   </div>
                 ))}
             </div>
@@ -162,7 +166,6 @@ export default async function PlantSalesLandingPage() {
           </div>
         </section>
       </main>
-
     </div>
   )
 }

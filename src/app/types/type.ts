@@ -135,9 +135,12 @@ export interface productBasket{
 }
 export type Action =
   | { type: 'ADD_ITEM'; payload: Product }
-  | { type: 'REMOVE_ITEM'; payload: string };
+  | { type: 'REMOVE_ITEM'; payload: string }
+  | { type: 'INITIALIZE_CART';  payload: Product[]}
+  ;
 
 export type ContextProps = {
   state: productBasket;
   dispatch: React.Dispatch<Action>;
+
 };

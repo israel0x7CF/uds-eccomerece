@@ -25,14 +25,22 @@ export default function CartPage() {
   const [cartItems, setCartItems] = useState<Product[]>(items)
 
   const updateQuantity = (id: string, newQuantity: number) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, orderQunatity: Math.max(0, newQuantity) } : item,
-      ),
-    )
+    console.log(id)
+    const testitemschange = items.filter((item) => item.id === id)
+    console.log(testitemschange)
+
+    // setCartItems((items) =>
+    //   items.map((item) =>
+    //     item.id === id ? { ...item, orderQunatity: Math.max(0, newQuantity) } : item,
+    //   ),
+    // )
   }
 
   const removeItem = (id: string) => {
+    console.log(id)
+    const productToRemove = items.filter((item) => item.id === id)[0]
+    console.log('Remove Item:', productToRemove)
+    dispatch({ type: 'REMOVE_ITEM', payload: productToRemove.id })
     setCartItems((items) => items.filter((item) => item.id !== id))
   }
 
@@ -162,7 +170,6 @@ export default function CartPage() {
           <p>&copy; 2024 ShitayeHerbs. All rights reserved.</p>
         </div>
       </footer>
-  
     </div>
   )
 }

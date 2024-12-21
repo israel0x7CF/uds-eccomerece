@@ -52,11 +52,7 @@ export default function ProductsPage() {
       parseFloat(product.price) >= priceRange[0] &&
       parseFloat(product.price) <= priceRange[1],
   )
-  const addToCart = (product: Product) => {
-    console.log('adding to cart:', product)
-    product.orderQunatity = product.orderQunatity ? product.orderQunatity + 1 : 1
-    dispatch({ type: 'ADD_ITEM', payload: product })
-  }
+
   const removeFromCart = (id: string) => {
     console.log(id)
     dispatch({ type: 'REMOVE_ITEM', payload: id })
@@ -70,46 +66,29 @@ export default function ProductsPage() {
           <div className="w-full md:w-3/4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
-                <Card key={product.id} className="overflow-hidden">
-                  <Image
-                    src={
-                      process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url ||
-                      `/placeholder.svg?height=200&width=300&text=${product.productName}`
-                    }
-                    alt={product.productName}
-                    width={300}
-                    height={200}
-                    onClick={() => {
-                      router.push(`/detail/${product.id}`)
-                    }}
-                    className="w-full h-48 object-cover max-w-xs transition duration-300 ease-in-out hover:scale-110"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="text-lg font-semibold mb-2">{product.productName}</h3>
-                    <p className="text-muted-foreground mb-2">{product.category}</p>
-
-                    <p className="text-lg font-bold">{parseFloat(product.price).toFixed(2)} ETB</p>
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0 space-x-1">
-                    <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-                      onClick={() => {
-                        router.push(`/detail/${product.id}`)
+                <Link href={`/detail/${product.id}`} key={product.id}>
+                  <Card className="relative w-80 h-48 overflow-hidden rounded-lg group">
+                    {/* Image background in its own container for scaling on hover */}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 ease-in-out group-hover:scale-105"
+                      style={{
+                        backgroundImage: `url('${
+                          process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url
+                        }')`,
                       }}
-                    >
-                      Buy
-                    </Button>
-                    <div className="flex items-center justify-between border w-full bg-white px-2 py-1 rounded-md">
-                      <Button
-                        className="text-sm text-gray-700 bg-green-100 px-2 py-1 rounded hover:bg-green-200"
-                        onClick={() => addToCart(product)}
-                      >
-                        <span className="text-sm font-medium text-gray-900">Add To Cart</span>
-                        <ShoppingCart />
-                      </Button>
+                    />
+
+                    {/* Gradient overlay and text */}
+                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <h3 className="text-lg font-semibold mb-2 text-white drop-shadow-sm">
+                        {product.productName}
+                      </h3>
+                      <p className="text-lg font-bold text-white drop-shadow-sm">
+                        {parseFloat(product.price).toFixed(2)} ETB
+                      </p>
                     </div>
-                  </CardFooter>
-                </Card>
+                  </Card>
+                </Link>
               ))}
             </div>
           </div>
