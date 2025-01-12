@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -22,41 +22,38 @@ import FeaturedProducts from '@/components/FeaturedProducts'
 export default function CartPage() {
   const { state, dispatch } = useProductCart()
   const { items } = state
-  const [cartItems, setCartItems] = useState<Product[]>(items)
 
   const updateQuantity = (id: string, newQuantity: number) => {
-    console.log(id)
-    const testitemschange = items.filter((item) => item.id === id)
-    console.log(testitemschange)
+    const updatedItems = items.map((item) =>
+      item.id === id ? { ...item, orderQunatity: Math.max(0, newQuantity) } : item,
+    )
 
-    // setCartItems((items) =>
-    //   items.map((item) =>
-    //     item.id === id ? { ...item, orderQunatity: Math.max(0, newQuantity) } : item,
-    //   ),
-    // )
+    dispatch({
+      type: 'UPDATE_ITEMS',
+      payload: updatedItems, // Explicitly assert the type if necessary
+    })
   }
 
   const removeItem = (id: string) => {
-    console.log(id)
-    const productToRemove = items.filter((item) => item.id === id)[0]
-    console.log('Remove Item:', productToRemove)
-    dispatch({ type: 'REMOVE_ITEM', payload: productToRemove.id })
-    setCartItems((items) => items.filter((item) => item.id !== id))
+    dispatch({ type: 'REMOVE_ITEM', payload: id })
   }
 
-  const subtotal = cartItems.reduce(
+  const subtotal = items ? items.reduce(
     (sum, item) => sum + Number(item.price) * (item.orderQunatity || 1),
     0,
-  )
+  ): 0
   const tax = subtotal * 0.1 // Assuming 10% tax
   const total = subtotal + tax
 
+  if(!items){
+    return
+  }
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
 
-        {cartItems.length === 0 ? (
+        {items.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-xl mb-4">Your cart is empty</p>
             <Button asChild>
@@ -78,7 +75,7 @@ export default function CartPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {cartItems.map((item) => (
+                  {items.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell>
                         <Image

@@ -6,45 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { payloadProductResponse, Product } from '@/app/types/type'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
-
-const featuredProducts = [
-  {
-    id: 1,
-    name: 'Monstera Deliciosa',
-    price: 39.99,
-    image: '/placeholder.svg?height=300&width=300&text=Monstera',
-  },
-  {
-    id: 2,
-    name: 'Fiddle Leaf Fig',
-    price: 49.99,
-    image: '/placeholder.svg?height=300&width=300&text=Fiddle+Leaf',
-  },
-  {
-    id: 3,
-    name: 'Snake Plant',
-    price: 29.99,
-    image: '/placeholder.svg?height=300&width=300&text=Snake+Plant',
-  },
-  {
-    id: 4,
-    name: 'Pothos',
-    price: 24.99,
-    image: '/placeholder.svg?height=300&width=300&text=Pothos',
-  },
-  {
-    id: 5,
-    name: 'ZZ Plant',
-    price: 34.99,
-    image: '/placeholder.svg?height=300&width=300&text=ZZ+Plant',
-  },
-  {
-    id: 6,
-    name: 'Peace Lily',
-    price: 29.99,
-    image: '/placeholder.svg?height=300&width=300&text=Peace+Lily',
-  },
-]
+import Link from 'next/link'
 
 export default function FeaturedProducts() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -71,26 +33,25 @@ export default function FeaturedProducts() {
     }
   }
   const nextSlide = () => {
-
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % featuredProducts.length)
-    
+    if (products) {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length)
+    }
   }
 
   const prevSlide = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + featuredProducts.length) % featuredProducts.length,
-    )
+    if (products) {
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length)
+    }
   }
 
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide()
-    }, 3000)
+    }, 2000)
 
     return () => clearInterval(timer)
-  }, [])
+  })
   useEffect(() => {
-    console.log('making call')
     const featuredProducts = async () => {
       await fetchFeaturedProducts()
     }
@@ -131,7 +92,7 @@ export default function FeaturedProducts() {
                     </CardContent>
                     <CardFooter className="p-4 pt-0">
                       <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                        Add to Cart
+                        <Link href={`detail/${product.id}`}>View</Link>
                       </Button>
                     </CardFooter>
                   </Card>

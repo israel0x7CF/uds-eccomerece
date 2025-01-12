@@ -6,9 +6,10 @@ import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
 import Navbar from '@/components/NavBar'
-import ProductCart from '@/hooks/cart'
-import Footer from '@/components/Footer'
 
+import Footer from '@/components/Footer'
+import dynamic from 'next/dynamic'
+const ProductCart = dynamic(() => import('@/hooks/cart'), { ssr: false })
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',

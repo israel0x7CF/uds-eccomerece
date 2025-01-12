@@ -136,6 +136,7 @@ export interface productBasket{
 export type Action =
   | { type: 'ADD_ITEM'; payload: Product }
   | { type: 'REMOVE_ITEM'; payload: string }
+  |  { type: 'UPDATE_ITEMS'; payload: Product[]  }
   | { type: 'INITIALIZE_CART';  payload: Product[]}
   ;
 
