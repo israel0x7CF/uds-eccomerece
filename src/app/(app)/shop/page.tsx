@@ -58,42 +58,49 @@ export default function ProductsPage() {
     dispatch({ type: 'REMOVE_ITEM', payload: id })
   }
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Our Herbs</h1>
+ <div className="min-h-screen bg-background text-foreground">
+  <main className="container mx-auto px-6 lg:px-12 xl:px-20 py-8">
+    <h1 className="text-3xl font-bold mb-8 text-center lg:text-left">Our Herbs</h1>
 
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-3/4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
-                <Link href={`/detail/${product.id}`} key={product.id}>
-                  <Card className="relative w-80 h-48 overflow-hidden rounded-lg group">
-                    {/* Image background in its own container for scaling on hover */}
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 ease-in-out group-hover:scale-105"
-                      style={{
-                        backgroundImage: `url('${
-                          process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url
-                        }')`,
-                      }}
-                    />
+    <div className="flex flex-col md:flex-row gap-10 lg:gap-16">
+      {/* Left Section (Filters) */}
+      {/* <aside className="w-full md:w-1/4 bg-gray-100 p-4 rounded-lg shadow-sm">
+       
+      </aside> */}
 
-                    {/* Gradient overlay and text */}
-                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4">
-                      <h3 className="text-lg font-semibold mb-2 text-white drop-shadow-sm">
-                        {product.productName}
-                      </h3>
-                      <p className="text-lg font-bold text-white drop-shadow-sm">
-                        {parseFloat(product.price).toFixed(2)} ETB
-                      </p>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </div>
+      {/* Right Section (Products) */}
+      <section className="w-full md:w-3/4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10">
+          {products.map((product) => (
+            <Link href={`/detail/${product.id}`} key={product.id}>
+              <Card className="relative w-full h-60 lg:h-80 overflow-hidden rounded-lg group">
+                {/* Image background */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-300 ease-in-out group-hover:scale-105"
+                  style={{
+                    backgroundImage: `url('${
+                      process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url
+                    }')`,
+                  }}
+                />
+
+                {/* Gradient overlay and text */}
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4">
+                  <h3 className="text-lg font-semibold mb-2 text-white drop-shadow-sm">
+                    {product.productName}
+                  </h3>
+                  <p className="text-lg font-bold text-white drop-shadow-sm">
+                    {parseFloat(product.price).toFixed(2)} ETB
+                  </p>
+                </div>
+              </Card>
+            </Link>
+          ))}
         </div>
-      </main>
+      </section>
     </div>
+  </main>
+</div>
+
   )
 }

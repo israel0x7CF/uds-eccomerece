@@ -47,7 +47,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide()
-    }, 2000)
+    }, 5000)
 
     return () => clearInterval(timer)
   })
@@ -91,9 +91,12 @@ export default function FeaturedProducts() {
                       </p>
                     </CardContent>
                     <CardFooter className="p-4 pt-0">
-                      <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                        <Link href={`detail/${product.id}`}>View</Link>
-                      </Button>
+                      <Link
+                        className="w-full text-white bg-primary hover:bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-5 py-2.5 dark:text-primary-foreground hover:bg-primary/90"
+                        href={`/detail/${product.id}`}
+                      >
+                        View
+                      </Link>
                     </CardFooter>
                   </Card>
                 </div>

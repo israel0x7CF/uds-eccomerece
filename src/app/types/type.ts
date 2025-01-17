@@ -53,7 +53,7 @@ export type Product = {
   description: string
   price: string
   Qty: number
-  category:string
+  category: string
   available: boolean
   image: {
     relationTo: string
@@ -63,7 +63,24 @@ export type Product = {
   updatedAt: string
   created_at: string
   updated_at: string
-  orderQunatity?:number
+  width?: string | null
+  height?: string | null
+  orderQunatity?: number
+  usage?: {
+    root: {
+      type: string
+      children: {
+        type: string
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
 }
 
 export interface Customers {
@@ -106,7 +123,6 @@ export interface checkoutSchema {
   tx_ref: string
 }
 
-
 export interface Root {
   message: string
   status: string
@@ -116,32 +132,28 @@ export interface Root {
 export interface Data {
   checkout_url: string
 }
-export interface payloadProductResponse{
-
-    docs: Product[];
-    totalDocs: number;
-    limit: number;
-    totalPages: number;
-    page: number;
-    pagingCounter: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevPage: any;
-    nextPage: any;
-  
+export interface payloadProductResponse {
+  docs: Product[]
+  totalDocs: number
+  limit: number
+  totalPages: number
+  page: number
+  pagingCounter: number
+  hasPrevPage: boolean
+  hasNextPage: boolean
+  prevPage: any
+  nextPage: any
 }
-export interface productBasket{
-  items:Product[]
+export interface productBasket {
+  items: Product[]
 }
 export type Action =
   | { type: 'ADD_ITEM'; payload: Product }
   | { type: 'REMOVE_ITEM'; payload: string }
-  |  { type: 'UPDATE_ITEMS'; payload: Product[]  }
-  | { type: 'INITIALIZE_CART';  payload: Product[]}
-  ;
+  | { type: 'UPDATE_ITEMS'; payload: Product[] }
+  | { type: 'INITIALIZE_CART'; payload: Product[] }
 
 export type ContextProps = {
-  state: productBasket;
-  dispatch: React.Dispatch<Action>;
-
-};
+  state: productBasket
+  dispatch: React.Dispatch<Action>
+}

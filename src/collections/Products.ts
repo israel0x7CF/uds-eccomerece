@@ -83,14 +83,14 @@ export const Products: CollectionConfig = {
       name: 'potsize',
       type: 'text',
       label: 'Pot Size',
-      admin:{
-        condition:(data, siblingData, { user }) => {
+      admin: {
+        condition: (data, siblingData, { user }) => {
           if (siblingData.potsize || data.potsize) {
             return true
           }
           return false
         },
-      }
+      },
     },
     {
       name: 'Qty',
@@ -132,6 +132,11 @@ export const Products: CollectionConfig = {
       type: 'date',
       label: 'Date Field',
       defaultValue: () => new Date().toISOString().split('T')[0], // Sets default to today's date
+    },
+    {
+      name: 'usage',
+      type: 'richText',
+      label: 'Usage',
     },
   ],
   hooks: {

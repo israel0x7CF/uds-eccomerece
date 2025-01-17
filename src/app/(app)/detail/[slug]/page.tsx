@@ -8,6 +8,8 @@ import FeaturedProducts from '@/components/FeaturedProducts'
 import { Button } from '@/components/ui/button'
 import { ShoppingCart } from 'lucide-react'
 import { useProductCart } from '@/hooks/cart'
+import { $getRoot, $getSelection } from 'lexical'
+import LexicalProcessor from '@/components/LexicalProcessor'
 
 type Props = {
   params: Promise<{
@@ -22,7 +24,6 @@ function Page({ params }: Props) {
   const { state, dispatch } = useProductCart()
 
   const addToCart = (product: Product) => {
- 
     product.orderQunatity = product.orderQunatity ? product.orderQunatity + 1 : 1
     dispatch({ type: 'ADD_ITEM', payload: product })
   }
@@ -100,7 +101,12 @@ function Page({ params }: Props) {
                 </span>
               </div>
             </div>
-
+            <div>
+              <span className="font-bold text-gray-600 dark:text-gray-400">Pot Size:</span>
+              <p className="text-gray-700 dark:text-gray-300 text-sm mt-2">
+                {product.width} X {product.height}
+              </p>
+            </div>
             <div>
               <span className="font-bold text-gray-600 dark:text-gray-400">
                 Product Description:
@@ -109,9 +115,14 @@ function Page({ params }: Props) {
                 {product.description || 'No description available'}
               </p>
             </div>
+            <div>
+              <span className="font-bold text-gray-600 dark:text-gray-400">Product Usage:</span>
+              {product.usage ? <LexicalProcessor serializedState={product.usage as any} /> : null}
+            </div>
           </div>
         </div>
       </div>
+
       <FeaturedProducts />
     </div>
   )
