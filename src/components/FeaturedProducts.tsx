@@ -1,17 +1,15 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { payloadProductResponse, Product } from '@/app/types/type'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
 import Link from 'next/link'
 
 export default function FeaturedProducts() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [products, setProducts] = useState<Product[]>()
+  const [products, setProducts] = useState<Product[]>([])
 
+  // Fetch featured products
   async function fetchFeaturedProducts() {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL
     const client = axios.create({ baseURL: baseUrl })
@@ -24,112 +22,60 @@ export default function FeaturedProducts() {
     const query = 'products/getFeaturedProducts?depth=1'
     try {
       const activeProducts: AxiosResponse<payloadProductResponse> = await client.get(query, config)
-
       const activeProductsList: Product[] = activeProducts.data.docs
       setProducts(activeProductsList)
     } catch (err) {
-      console.log(err)
-      return null
-    }
-  }
-  const nextSlide = () => {
-    if (products) {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length)
+      console.error(err)
     }
   }
 
-  const prevSlide = () => {
-    if (products) {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length)
-    }
-  }
-
+  // Fetch products on component mount
   useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide()
-    }, 5000)
-
-    return () => clearInterval(timer)
-  })
-  useEffect(() => {
-    const featuredProducts = async () => {
-      await fetchFeaturedProducts()
-    }
-    featuredProducts()
+    fetchFeaturedProducts()
   }, [])
 
   return (
-    <section className="py-16 bg-muted">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-8">Featured Herbs</h2>
-        <div className="relative">
-          <div className="flex overflow-hidden">
-            {products &&
-              products.map((product, index) => (
-                <div
-                  key={product.id}
-                  className={`w-full flex-shrink-0 transition-all duration-300 ease-in-out transform ${
-                    index === currentIndex ? 'translate-x-0' : 'translate-x-full'
-                  }`}
-                  style={{ marginLeft: index === 0 ? `-${currentIndex * 100}%` : 0 }}
-                >
-                  <Card className="mx-auto max-w-sm overflow-hidden">
-                    <Image
-                      src={
-                        process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url ||
-                        `/placeholder.svg?height=200&width=300&text=${product.productName}`
-                      }
-                      alt={product.productName}
-                      width={300}
-                      height={300}
-                      className="w-full h-64 object-cover"
-                    />
-                    <CardContent className="p-4">
-                      <h3 className="text-xl font-semibold mb-2">{product.productName}</h3>
-                      <p className="text-lg font-bold text-primary">
-                        ${Number(product.price).toFixed(2)}
-                      </p>
-                    </CardContent>
-                    <CardFooter className="p-4 pt-0">
-                      <Link
-                        className="w-full text-white bg-primary hover:bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-5 py-2.5 dark:text-primary-foreground hover:bg-primary/90"
-                        href={`/detail/${product.id}`}
-                      >
-                        View
-                      </Link>
-                    </CardFooter>
-                  </Card>
-                </div>
-              ))}
-          </div>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-background/80 text-foreground hover:bg-background"
-            onClick={prevSlide}
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-background/80 text-foreground hover:bg-background"
-            onClick={nextSlide}
-          >
-            <ChevronRight className="h-6 w-6" />
-          </Button>
+    <section className="py-10">
+      <div className="container mx-auto px-6">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-primary">Popular Herbs</h2>
+          <a href="/shop" className="text-red-600 font-medium hover:underline">
+            View more &gt;
+          </a>
         </div>
-        <div className="flex justify-center mt-4">
-          {products &&
-            products.map((_, index) => (
-              <button
-                key={index}
-                className={`h-2 w-2 rounded-full mx-1 ${
-                  index === currentIndex ? 'bg-primary' : 'bg-muted-foreground/30'
-                }`}
-                onClick={() => setCurrentIndex(index)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+          {products.map((product) => (
+            <Card
+              key={product.id}
+              className="mx-auto w-full sm:w-72 lg:w-80 h-auto overflow-hidden rounded-lg shadow-md bg-white"
+            >
+              <Image
+                src={
+                  product.image?.value?.url
+                    ? process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url
+                    : `/placeholder.svg?height=200&width=300&text=${product.productName}`
+                }
+                alt={product.productName}
+                width={400}
+                height={300}
+                className="w-full h-56 object-cover"
               />
-            ))}
+              <CardContent className="p-4">
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">{product.productName}</h3>
+                <p className="text-lg font-bold text-green-700">
+                  ${Number(product.price).toFixed(2)}
+                </p>
+              </CardContent>
+              <CardFooter className="p-4 pt-0">
+                <Link
+                  className="w-full text-center hover:bg-green-800 hover:text-white font-medium rounded-lg text-sm px-4 py-2"
+                  href={`/detail/${product.id}`}
+                >
+                  View
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       </div>
     </section>

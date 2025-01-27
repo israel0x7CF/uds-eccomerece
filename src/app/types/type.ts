@@ -52,6 +52,7 @@ export type Product = {
   productName: string
   description: string
   price: string
+  productType:string,
   Qty: number
   category: string
   available: boolean

@@ -1,25 +1,28 @@
 'use client'
-import React, { useEffect, useState, use } from 'react'
-import fetchData from '@/app/utils/fetch'
-import { Product } from '@/app/types/type'
-import { useRouter } from 'next/navigation'
-import { ApiResponseSingleFetch } from '@/app/types/type'
-import FeaturedProducts from '@/components/FeaturedProducts'
+
+import { useState, useEffect, use } from 'react'
+import Image from 'next/image'
+import { ChevronLeft, Minus, Plus, Leaf, Droplet, Sun, ThermometerSun } from 'lucide-react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import axios from 'axios'
+import { Product } from '@/app/types/type'
 import { useProductCart } from '@/hooks/cart'
-import { $getRoot, $getSelection } from 'lexical'
 import LexicalProcessor from '@/components/LexicalProcessor'
+import FeaturedProducts from '@/components/FeaturedProducts'
 
 type Props = {
-  params: Promise<{
-    slug: string
-  }>
-}
-function Page({ params }: Props) {
+    params: Promise<{
+      slug: string
+    }>
+  }
+
+export default function ProductDetail({ params }: Props) {
   const [product, setProduct] = useState<Product | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
+  const [quantity, setQuantity] = useState(1)
+  const [selectedImage, setSelectedImage] = useState(0)
   const { slug } = use(params)
   const { state, dispatch } = useProductCart()
 
@@ -28,104 +31,143 @@ function Page({ params }: Props) {
     dispatch({ type: 'ADD_ITEM', payload: product })
   }
 
+  // Fetch the product details
   useEffect(() => {
-    const fetchProduct = async () => {
-      const url = `${process.env.NEXT_PUBLIC_API_URL || ''}products/${slug}`
-
+    const fetchProductDetails = async () => {
       try {
-        const productResponse = await fetchData<Product>(url, 'products', true)
-
-        if ((productResponse as ApiResponseSingleFetch<Product>).error) {
-          setError('Failed to fetch product')
-        } else {
-          const fetchedProduct = (productResponse as ApiResponseSingleFetch<Product>).data
-          setProduct(fetchedProduct)
-        }
-      } catch (fetchError) {
-        setError(fetchError instanceof Error ? fetchError.message : 'Unknown error')
+        const response = await axios.get<Product>(
+          `${process.env.NEXT_PUBLIC_API_URL}/products/${slug}`
+        )
+        setProduct(response.data)
+      } catch (error) {
+        console.error('Error fetching product details:', error)
       }
     }
 
-    fetchProduct()
+    fetchProductDetails()
   }, [slug])
 
-  // Check if product is null and return a fallback UI
+  const incrementQuantity = () => setQuantity((prev) => prev + 1)
+  const decrementQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
+
   if (!product) {
-    return <div className="text-center text-gray-600">Loading product details...</div>
+    return <p>Loading...</p>
   }
 
+  const images = product.image?.value?.url
+    ? [process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url]
+    : ['/placeholder.svg']
+
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row -mx-4">
-          {/* Product Image and Checkout */}
-          <div className="md:flex-1 px-4">
-            <div className="h-[460px] rounded-lg bg-white dark:bg-gray-800 mb-4">
-              <img
-                className="w-full h-full object-cover"
-                src={
-                  product.image?.value?.url
-                    ? `${process.env.NEXT_PUBLIC_HOST_URL}${product.image.value.url}`
-                    : ''
-                }
-                alt="Product Image"
-              />
-            </div>
-            <div className="flex -mx-2 mb-4">
-              <div className="w-full px-2">
-                <Button
-                  className="flex items-center space-x-2 text-sm text-gray-700 bg-green-100 px-2 py-1 rounded hover:bg-green-200"
-                  onClick={() => addToCart(product)}
-                >
-                  Add To Cart
-                  <ShoppingCart />
-                </Button>
-              </div>
-            </div>
+    <div className="container mx-auto px-4 py-8">
+      <Link href="/shop" className="inline-flex items-center text-purple-800 hover:text-purple-900 mb-6">
+        <ChevronLeft className="h-4 w-4 mr-1" />
+        Back to herbs
+      </Link>
+
+      <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        {/* Product Images */}
+        <div className="space-y-4">
+          <div className="relative aspect-square overflow-hidden rounded-lg border">
+            <Image
+              src={images[selectedImage] || '/placeholder.svg'}
+              alt={product.productName}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            {images.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImage(index)}
+                className={`relative aspect-square overflow-hidden rounded-md border ${
+                  selectedImage === index ? 'ring-2 ring-purple-800' : ''
+                }`}
+              >
+                <Image
+                  src={image || '/placeholder.svg'}
+                  alt={`Product thumbnail ${index + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Product Info */}
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl font-semibold">{product.productName}</h1>
+            <p className="text-lg italic text-gray-600 mt-1">{product.description}</p>
           </div>
 
-          {/* Product Details */}
-          <div className="md:flex-1 px-4">
-            <h2 className="text-2xl font-bold text-black dark:text-white mb-2">
-              {product.productName || 'Product Name'}
-            </h2>
-            <div className="flex mb-4">
-              <div className="mr-4">
-                <span className="font-bold text-gray-600 dark:text-gray-400">
-                  Price: {product.price || 'N/A'} ETB
-                </span>
+          <div className="flex items-baseline gap-4">
+            <span className="text-2xl font-semibold">${Number(product.price).toFixed(2)}</span>
+            <span className="text-sm text-gray-500">Price includes VAT</span>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="font-medium">About this product</h2>
+            <p className="text-gray-600">
+              {product.usage?.root?.children?.map((child) => child.text || '').join(' ') || 'No additional details.'}
+            </p>
+          </div>
+
+          <Card>
+            <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4">
+              <div className="text-center space-y-2">
+                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
+                  <Sun className="h-5 w-5 text-purple-800" />
+                </div>
+                <p className="text-sm">Full Sun</p>
               </div>
-              <div>
-                <span className="font-bold text-gray-600 dark:text-gray-400">
-                  {product.available ? 'In Stock' : 'Out of Stock'}
-                </span>
+              <div className="text-center space-y-2">
+                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
+                  <Droplet className="h-5 w-5 text-purple-800" />
+                </div>
+                <p className="text-sm">Low Water</p>
               </div>
-            </div>
-            <div>
-              <span className="font-bold text-gray-600 dark:text-gray-400">Pot Size:</span>
-              <p className="text-gray-700 dark:text-gray-300 text-sm mt-2">
-                {product.width} X {product.height}
-              </p>
-            </div>
-            <div>
-              <span className="font-bold text-gray-600 dark:text-gray-400">
-                Product Description:
-              </span>
-              <p className="text-gray-700 dark:text-gray-300 text-sm mt-2">
-                {product.description || 'No description available'}
-              </p>
-            </div>
-            <div>
-              <span className="font-bold text-gray-600 dark:text-gray-400">Product Usage:</span>
-              {product.usage ? <LexicalProcessor serializedState={product.usage as any} /> : null}
-            </div>
+              <div className="text-center space-y-2">
+                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
+                  <Leaf className="h-5 w-5 text-purple-800" />
+                </div>
+                <p className="text-sm">Evergreen</p>
+              </div>
+              <div className="text-center space-y-2">
+                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
+                  <ThermometerSun className="h-5 w-5 text-purple-800" />
+                </div>
+                <p className="text-sm">Hardy</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Tabs defaultValue="growing" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="usage">Usage</TabsTrigger>
+              <TabsTrigger value="description">Description</TabsTrigger>
+              <TabsTrigger value="Detail">Detail</TabsTrigger>
+            </TabsList>
+            <TabsContent value="usage" className="text-gray-600">
+            {product.usage ? <LexicalProcessor serializedState={product.usage as any} /> : null}
+            </TabsContent>
+            {/* <TabsContent value="harvesting" className="text-gray-600">
+              {product.usage?.root?.children?.[1]?.text || 'Harvesting details not available.'}
+            </TabsContent>
+            <TabsContent value="uses" className="text-gray-600">
+              {product.usage?.root?.children?.[2]?.text || 'Usage details not available.'}
+            </TabsContent> */}
+          </Tabs>
+
+          <div className="flex items-center gap-6 pt-6 border-t">
+            <Button className="flex-1 hover:bg-sage-green/90" onClick={()=>{addToCart(product)}}>Add to basket</Button>
           </div>
         </div>
       </div>
-
       <FeaturedProducts />
     </div>
   )
 }
-
-export default Page
