@@ -6,6 +6,7 @@ import { ShoppingCart, Search, Menu, Leaf, Droplet, Sun } from 'lucide-react'
 import AnimatedButton from '@/components/customButton'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
 import { ApiResponse, payloadProductResponse, Product } from '../types/type'
+import FeaturedProducts from '@/components/FeaturedProducts'
 
 async function fetchFeaturedProducts(): Promise<Product[] | null> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
@@ -115,43 +116,7 @@ export default async function PlantSalesLandingPage() {
         </section>
 
         <section className="py-16">
-  <div className="container mx-auto px-4">
-    <h2 className="text-3xl font-bold text-center mb-12">Featured Herbs</h2>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-      {activeProducts &&
-        activeProducts.map((plant) => (
-          <div key={plant.id}>
-            <Link href={`/detail/${plant.id}`} className="cursor-pointer">
-              <div
-                key={plant.productName}
-                className="group relative overflow-hidden rounded-lg shadow-lg"
-              >
-                <Image
-                  src={assetUrl + plant.image.value.url}
-                  alt={plant.productName}
-                  width={300}
-                  height={400}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">
-                      {plant.productName}
-                    </h3>
-                    <h2 className="text-xl font-semibold mb-2 text-white">
-                      Br.{plant.price}
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            <Link href={`/detail/${plant.id}`} className="text-white hover:underline">
-              Learn More
-            </Link>
-          </div>
-        ))}
-    </div>
-  </div>
+<FeaturedProducts />
 </section>
 
 
