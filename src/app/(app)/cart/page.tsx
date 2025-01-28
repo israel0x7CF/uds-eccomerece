@@ -117,7 +117,7 @@ export default function CartPage() {
                       </TableCell>
                       <TableCell className="text-right">${Number(item.price).toFixed(2)}</TableCell>
                       <TableCell className="text-right">
-                        ${(Number(item.price) * (item.orderQunatity || 1)).toFixed(2)}
+                        Br.{(Number(item.price) * (item.orderQunatity || 1)).toFixed(2)}
                       </TableCell>
                       <TableCell>
                         {/* onClick={() => removeItem(item.id)} */}
@@ -137,16 +137,16 @@ export default function CartPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>Br.{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>Br.{tax.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-border pt-2 mt-2">
                     <div className="flex justify-between font-semibold">
                       <span>Total</span>
-                      <span>${total.toFixed(2)}</span>
+                      <span>Br.{total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

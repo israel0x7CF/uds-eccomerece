@@ -44,6 +44,11 @@ export const Products: CollectionConfig = {
       label: 'Name',
     },
     {
+      name: 'botanicalName',
+      type: 'text',
+      label: 'Botanical Name',
+    },
+    {
       name: 'featuredProduct',
       type: 'checkbox',
       label: 'Featured Product',
@@ -54,7 +59,7 @@ export const Products: CollectionConfig = {
 
     {
       name: 'description',
-      type: 'text',
+      type: 'textarea',
       label: 'Description',
     },
 
@@ -106,11 +111,11 @@ export const Products: CollectionConfig = {
       name: 'productType',
       type: 'select',
       label: 'Product Type',
+      defaultValue:"herb",
       options: [
-        { value: 'Indoor', label: 'Indoor' },
-        { value: 'Hanging', label: 'Hanging' },
-        { value: 'Succulent', label: 'Succulent' },
-        { value: 'Flowering', label: 'Flowering' },
+        { value: 'herb', label: 'herb' },
+        { value: 'herbal_teas', label: 'Herbal teas' },
+
       ],
     },
     {

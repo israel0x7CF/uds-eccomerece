@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react'
 import Image from 'next/image'
-import { ChevronLeft, Minus, Plus, Leaf, Droplet, Sun, ThermometerSun } from 'lucide-react'
+import { ChevronLeft, Minus, Plus, Leaf, Droplet, Sun, ThermometerSun, Coffee } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -101,11 +101,11 @@ export default function ProductDetail({ params }: Props) {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-semibold">{product.productName}</h1>
-
+            <h5 className="text-xl italic">{product.botanicalName || "no botanical name"}</h5>
           </div>
 
           <div className="flex items-baseline gap-4">
-            <span className="text-2xl font-semibold">${Number(product.price).toFixed(2)}</span>
+            <span className="text-2xl font-semibold">Br.{Number(product.price).toFixed(2)}</span>
             <span className="text-sm text-gray-500">Price includes VAT</span>
           </div>
 
@@ -114,34 +114,45 @@ export default function ProductDetail({ params }: Props) {
             <p className="text-gray-600">
               {product.description|| 'No additional details.'}
             </p>
+            
+
+          </div>
+          <div className="space-y-1">
+            <h2 className="font-medium">Pot Size</h2>
+            <p className="text-gray-600">
+              {product.width+"X"+product.height|| 'No additional details.'}
+            </p>
+            
+
           </div>
 
           <Card>
             <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4">
               <div className="text-center space-y-2">
-                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
-                  <Sun className="h-5 w-5 text-purple-800" />
-                </div>
-                <p className="text-sm">Full Sun</p>
-              </div>
+                {product.productType === 'herb' ?  (
+                  <>
+                  <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
+                    {/* <Sun className="h-5 w-5 text-purple-800" /> */}
+                    <Leaf className="h-5 w-5 text-purple-800"/>
+                  </div>
+                  <p className="text-sm">Herb</p>
+                  </>
+
+                ) : <></>}
               <div className="text-center space-y-2">
-                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
-                  <Droplet className="h-5 w-5 text-purple-800" />
-                </div>
-                <p className="text-sm">Low Water</p>
+                {product.productType === 'herbal_teas' ?  (
+                  <>
+                  <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
+                    {/* <Sun className="h-5 w-5 text-purple-800" /> */}
+                    <Coffee className="h-5 w-5 text-purple-800"/>
+                  </div>
+                  <p className="text-sm">Herb</p>
+                  </>
+
+                ) : <></>}
               </div>
-              <div className="text-center space-y-2">
-                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
-                  <Leaf className="h-5 w-5 text-purple-800" />
-                </div>
-                <p className="text-sm">Evergreen</p>
               </div>
-              <div className="text-center space-y-2">
-                <div className="mx-auto w-fit p-2 rounded-full bg-purple-50">
-                  <ThermometerSun className="h-5 w-5 text-purple-800" />
-                </div>
-                <p className="text-sm">Hardy</p>
-              </div>
+
             </CardContent>
           </Card>
 

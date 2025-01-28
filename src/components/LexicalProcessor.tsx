@@ -10,6 +10,20 @@ interface TextNode {
   version: number;
 }
 
+interface LinebreakNode {
+  type: 'linebreak';
+  version: number;
+}
+
+interface ParagraphNode {
+  type: 'paragraph';
+  direction: string;
+  format: string;
+  indent: number;
+  version: number;
+  children: Array<TextNode | LinebreakNode>;
+}
+
 interface HeadingNode {
   type: 'heading';
   tag: string;
@@ -47,12 +61,13 @@ interface RootNode {
   format: string;
   indent: number;
   version: number;
-  children: Array<HeadingNode | ListNode>;
+  children: Array<HeadingNode | ListNode | ParagraphNode>;
 }
 
 interface SerializedState {
   root: RootNode;
 }
+
 interface AppProps {
   serializedState: SerializedState;
 }
@@ -78,12 +93,20 @@ const renderNode = (node: any, index: number): React.ReactNode => {
         { key: index },
         node.children.map((child: any, childIndex: number) => renderNode(child, childIndex))
       );
+    case 'paragraph':
+      return React.createElement(
+        'p',
+        { key: index },
+        node.children.map((child: any, childIndex: number) => renderNode(child, childIndex))
+      );
     case 'text':
       return (
         <span key={index}>{node.text}</span>
       );
+    case 'linebreak':
+      return <br key={index} />;
     default:
-      return null;
+      return JSON.stringify(node);
   }
 };
 
@@ -95,9 +118,7 @@ const RichTextRenderer: React.FC<{ serializedState: SerializedState }> = ({ seri
   );
 };
 
-
-
-const LexicalProcessor: React.FC<AppProps> = ({serializedState}) => {
+const LexicalProcessor: React.FC<AppProps> = ({ serializedState }) => {
   return (
     <div>
       <RichTextRenderer serializedState={serializedState} />

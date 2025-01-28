@@ -93,6 +93,7 @@ export interface Media {
 export interface Product {
   id: string;
   productName?: string | null;
+  botanicalName?: string | null;
   featuredProduct?: boolean | null;
   description?: string | null;
   longDescription?: string | null;
@@ -102,7 +103,7 @@ export interface Product {
   potsize?: string | null;
   Qty?: number | null;
   available?: boolean | null;
-  productType?: ('Indoor' | 'Hanging' | 'Succulent' | 'Flowering') | null;
+  productType?: ('herb' | 'herbal_teas') | null;
   image?: {
     relationTo: 'media';
     value: string | Media;

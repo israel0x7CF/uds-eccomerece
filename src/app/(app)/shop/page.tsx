@@ -12,10 +12,12 @@ import fetchData from '@/app/utils/fetch'
 import Link from 'next/link'
 import ProductCard from '@/components/ProductCard'
 
+const productTypes =[{label:"Herb",value:"herb"},  { value: 'herbal_teas', label: 'Herbal teas' }]
+
 export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('All')
-  const [priceRange, setPriceRange] = useState([0, 1000]) // Default range: $0 to $1000
+  const [priceRange, setPriceRange] = useState([0, 10000]) // Default range: $0 to $1000
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -75,14 +77,16 @@ export default function ProductsPage() {
 
               <div>
                 <h2 className="text-lg font-semibold mb-2">Category</h2>
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <Select defaultValue="All" value={categoryFilter} onValueChange={setCategoryFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="All">All Categories</SelectItem>
-                    <SelectItem value="Hanging">Hanging</SelectItem>
-                    <SelectItem value="Indoor">Indoor</SelectItem>
+                  <SelectItem  value="All">All</SelectItem> 
+                    {productTypes.map((type,index)=>(
+                      <SelectItem key={index} value={type.value}>{type.label}</SelectItem>
+                    ))}
+
                   </SelectContent>
                 </Select>
               </div>

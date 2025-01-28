@@ -50,6 +50,7 @@ type Image = {
 export type Product = {
   id: string
   productName: string,
+  botanicalName:string
   longDescription:string,
   description: string
   price: string

@@ -5,7 +5,14 @@ import Image from 'next/image'
 import { payloadProductResponse, Product } from '@/app/types/type'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
 import Link from 'next/link'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+import ProductCard from './ProductCard'
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -54,34 +61,7 @@ export default function FeaturedProducts() {
           <CarouselContent>
             {products.map((product) => (
               <CarouselItem key={product.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
-                <Card className="overflow-hidden">
-                  <div className="relative h-48 w-full overflow-hidden">
-                    <Image
-                      src={
-                        process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url ||
-                        `/placeholder.svg?height=200&width=300&text=${product.productName}`
-                      }
-                      alt={product.productName}
-                      width={300}
-                      height={200}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="text-xl font-semibold mb-2 line-clamp-2">{product.productName}</h3>
-                    <p className="text-lg font-bold text-primary">
-                      ${Number(product.price).toFixed(2)}
-                    </p>
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0">
-                    <Link
-                      className="w-full text-white bg-primary hover:bg-primary/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors"
-                      href={`/detail/${product.id}`}
-                    >
-                      View
-                    </Link>
-                  </CardFooter>
-                </Card>
+                <ProductCard product={product} />
               </CarouselItem>
             ))}
           </CarouselContent>
