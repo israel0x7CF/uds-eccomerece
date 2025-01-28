@@ -10,11 +10,12 @@ import Image from 'next/image'
 import { ApiResponse, Product } from '@/app/types/type'
 import fetchData from '@/app/utils/fetch'
 import Link from 'next/link'
+import ProductCard from '@/components/ProductCard'
 
 export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('All')
-  const [priceRange, setPriceRange] = useState([0, 1000000])
+  const [priceRange, setPriceRange] = useState([0, 1000]) // Default range: $0 to $1000
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -23,6 +24,7 @@ export default function ProductsPage() {
       setIsLoading(true)
       const url = process.env.NEXT_PUBLIC_API_URL + 'products'
       const productsResponse = await fetchData<Product>(url, 'products')
+      console.log("products",productsResponse)
 
       if (!productsResponse.error) {
         const fetchedProducts = (productsResponse as ApiResponse<Product>).data.docs
@@ -67,7 +69,7 @@ export default function ProductsPage() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
                   />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2" />
                 </div>
               </div>
 
@@ -88,15 +90,15 @@ export default function ProductsPage() {
               <div>
                 <h2 className="text-lg font-semibold mb-2">Price Range</h2>
                 <Slider
-                  defaultValue={[(priceRange[1]/2)]}
-                  min={priceRange[0]}
-                  max={priceRange[1]}
+                  defaultValue={[priceRange[0], priceRange[1]]}
+                  min={0}
+                  max={1000} // Set max price to $1000 (adjust as needed)
                   step={10}
                   value={priceRange}
-                  onValueChange={setPriceRange}
+                  onValueChange={(value) => setPriceRange(value)}
                   className="mb-2"
                 />
-                <div className="flex justify-between text-sm text-muted-foreground">
+                <div className="flex justify-between text-sm">
                   <span>${priceRange[0]}</span>
                   <span>${priceRange[1]}</span>
                 </div>
@@ -110,32 +112,7 @@ export default function ProductsPage() {
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product) => (
-                  <Card className="mx-auto max-w-sm overflow-hidden" key={product.id}>
-                  <Image
-                    src={
-                      process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url ||
-                      `/placeholder.svg?height=200&width=300&text=${product.productName}`
-                    }
-                    alt={product.productName}
-                    width={300}
-                    height={300}
-                    className="w-full h-64 object-cover"
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="text-xl font-semibold mb-2">{product.productName}</h3>
-                    <p className="text-lg font-bold text-primary">
-                      ${Number(product.price).toFixed(2)}
-                    </p>
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0">
-                    <Link
-                      className="w-full text-white bg-primary hover:bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-5 py-2.5 dark:text-primary-foreground hover:bg-primary/90"
-                      href={`/detail/${product.id}`}
-                    >
-                      View
-                    </Link>
-                  </CardFooter>
-                </Card>
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (

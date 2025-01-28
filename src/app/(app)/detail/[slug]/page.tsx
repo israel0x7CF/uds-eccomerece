@@ -101,7 +101,7 @@ export default function ProductDetail({ params }: Props) {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-semibold">{product.productName}</h1>
-            <p className="text-lg italic text-gray-600 mt-1">{product.description}</p>
+
           </div>
 
           <div className="flex items-baseline gap-4">
@@ -112,7 +112,7 @@ export default function ProductDetail({ params }: Props) {
           <div className="space-y-4">
             <h2 className="font-medium">About this product</h2>
             <p className="text-gray-600">
-              {product.usage?.root?.children?.map((child) => child.text || '').join(' ') || 'No additional details.'}
+              {product.description|| 'No additional details.'}
             </p>
           </div>
 
@@ -145,21 +145,19 @@ export default function ProductDetail({ params }: Props) {
             </CardContent>
           </Card>
 
-          <Tabs defaultValue="growing" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="usage">Usage</TabsTrigger>
-              <TabsTrigger value="description">Description</TabsTrigger>
+          <Tabs defaultValue="usage" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger  value="usage" >Usage</TabsTrigger>
+              {/* <TabsTrigger value="description">Description</TabsTrigger> */}
               <TabsTrigger value="Detail">Detail</TabsTrigger>
             </TabsList>
-            <TabsContent value="usage" className="text-gray-600">
+            <TabsContent  value="usage" className="text-gray-600">
             {product.usage ? <LexicalProcessor serializedState={product.usage as any} /> : null}
             </TabsContent>
-            {/* <TabsContent value="harvesting" className="text-gray-600">
-              {product.usage?.root?.children?.[1]?.text || 'Harvesting details not available.'}
+
+            <TabsContent value="Detail" className="text-gray-600">
+              {product.longDescription}
             </TabsContent>
-            <TabsContent value="uses" className="text-gray-600">
-              {product.usage?.root?.children?.[2]?.text || 'Usage details not available.'}
-            </TabsContent> */}
           </Tabs>
 
           <div className="flex items-center gap-6 pt-6 border-t">

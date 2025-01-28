@@ -49,7 +49,8 @@ type Image = {
 
 export type Product = {
   id: string
-  productName: string
+  productName: string,
+  longDescription:string,
   description: string
   price: string
   productType:string,

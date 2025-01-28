@@ -4,6 +4,9 @@ import React from 'react'
 import { Button } from './ui/button'
 import { ChevronRight } from 'lucide-react'
 import { redirect } from 'next/navigation'
+import { Card, CardContent, CardFooter } from './ui/card'
+import Link from 'next/link'
+import Image from 'next/image'
 
 type props = {
   product: Product
@@ -11,68 +14,32 @@ type props = {
 const ProductCard: React.FC<props> = (prop) => {
   const product = prop.product
   return (
-    <div className="flex-shrink-0  relative overflow-hidden bg-[hsl(var(--primary))] rounded-lg max-w-xs shadow-lg">
-      <svg
-        className="absolute bottom-0 left-0 mb-8"
-        viewBox="0 0 375 283"
-        fill="none"
-        style={{ transform: 'scale(1.5)', opacity: 0.1 }}
+    <Card className="mx-auto max-w-sm overflow-hidden" key={product.id}>
+    <Image
+      src={
+        process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url ||
+        `/placeholder.svg?height=200&width=300&text=${product.productName}`
+      }
+      alt={product.productName}
+      width={200}
+      height={200}
+      className="w-full h-58 object-cover"
+    />
+    <CardContent className="p-4">
+      <h3 className="text-xl font-semibold mb-2">{product.productName}</h3>
+      <p className="text-lg font-bold text-primary">
+        ${Number(product.price).toFixed(2)}
+      </p>
+    </CardContent>
+    <CardFooter className="p-4 pt-0">
+      <Link
+        className="w-full text-white bg-primary hover:bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-5 py-2.5 dark:text-primary-foreground hover:bg-primary/90"
+        href={`/detail/${product.id}`}
       >
-        <rect
-          x="159.52"
-          y="175"
-          width="152"
-          height="152"
-          rx="8"
-          transform="rotate(-45 159.52 175)"
-          fill="white"
-        />
-        <rect
-          y="107.48"
-          width="152"
-          height="152"
-          rx="8"
-          transform="rotate(-45 0 107.48)"
-          fill="white"
-        />
-      </svg>
-      <div className="relative pt-10 px-10 flex items-center justify-center">
-        <div
-          className="block absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3"
-          style={{
-            background: 'radial-gradient(black, transparent 60%)',
-            transform: 'rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1)',
-            opacity: 0.2,
-          }}
-        ></div>
-        <img
-          className="relative w-40"
-          src="https://user-images.githubusercontent.com/2805249/64069899-8bdaa180-cc97-11e9-9b19-1a9e1a254c18.png"
-          alt="Peace Lily"
-        />
-      </div>
-      <div className="relative text-[hsl(var(--primary-foreground))] px-6 pb-6 mt-6">
-        <span className="block opacity-75 -mb-1 text-[hsl(var(--muted-foreground))]">Indoor</span>
-        <div className="flex justify-between">
-          <span className="block font-semibold text-xl">{product.productName}</span>
-        </div>
-        <span className=" bg-white text-[hsl(var(--primary))] text-xs font-bold px-3 py-2 leading-none flex items-center">
-          {product.price}
-        </span>
-        <Button
-          className="inline-flex h-10 items-center justify-center rounded-md px-8 text-sm font-medium shadow transition-colors
-    bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]
-    hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--secondary-foreground))]
-    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:bg-[hsl(var(--primary), 0.8)]
-    disabled:pointer-events-none disabled:opacity-50"
-          onClick={() => {
-            redirect(`/detail/${product.id}`)
-          }}
-        >
-          <ChevronRight />
-        </Button>
-      </div>
-    </div>
+        View
+      </Link>
+    </CardFooter>
+  </Card>
   )
 }
 

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { payloadProductResponse, Product } from '@/app/types/type'
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios'
 import Link from 'next/link'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -43,40 +44,50 @@ export default function FeaturedProducts() {
             View more &gt;
           </a>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-          {products.map((product) => (
-            <Card
-              key={product.id}
-              className="mx-auto w-full sm:w-72 lg:w-80 h-auto overflow-hidden rounded-lg shadow-md bg-white"
-            >
-              <Image
-                src={
-                  product.image?.value?.url
-                    ? process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url
-                    : `/placeholder.svg?height=200&width=300&text=${product.productName}`
-                }
-                alt={product.productName}
-                width={400}
-                height={300}
-                className="w-full h-56 object-cover"
-              />
-              <CardContent className="p-4">
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">{product.productName}</h3>
-                <p className="text-lg font-bold text-green-700">
-                  ${Number(product.price).toFixed(2)}
-                </p>
-              </CardContent>
-              <CardFooter className="p-4 pt-0">
-                <Link
-                  className="w-full text-center hover:bg-green-800 hover:text-white font-medium rounded-lg text-sm px-4 py-2"
-                  href={`/detail/${product.id}`}
-                >
-                  View
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+        <Carousel
+          opts={{
+            align: 'start',
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {products.map((product) => (
+              <CarouselItem key={product.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                <Card className="overflow-hidden">
+                  <div className="relative h-48 w-full overflow-hidden">
+                    <Image
+                      src={
+                        process.env.NEXT_PUBLIC_HOST_URL + product.image.value.url ||
+                        `/placeholder.svg?height=200&width=300&text=${product.productName}`
+                      }
+                      alt={product.productName}
+                      width={300}
+                      height={200}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="text-xl font-semibold mb-2 line-clamp-2">{product.productName}</h3>
+                    <p className="text-lg font-bold text-primary">
+                      ${Number(product.price).toFixed(2)}
+                    </p>
+                  </CardContent>
+                  <CardFooter className="p-4 pt-0">
+                    <Link
+                      className="w-full text-white bg-primary hover:bg-primary/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors"
+                      href={`/detail/${product.id}`}
+                    >
+                      View
+                    </Link>
+                  </CardFooter>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white/70 rounded-full p-2 shadow-lg" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white/70 rounded-full p-2 shadow-lg" />
+        </Carousel>
       </div>
     </section>
   )
